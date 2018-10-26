@@ -45,7 +45,25 @@ http.createServer((req, res)=>{
         });
     }
         
-    
+    if(pathname.split(".")[1] == "css"){
+        //Peticion de la hoja CSS
+        fs.readFile(".."+pathname, (err, data)=>{
+
+                if (err) {
+                  console.log(err);
+                  res.writeHead(404, {
+                    'Content-Type': 'text/html'
+                  });       return res.end("404 Not Found");     }
+            
+                res.writeHead(200, {
+                  'Content-Type': mimeTypes[pathname.split('.').pop()] || 'text/css'
+                });            
+                // Escribe el contenido de data en el body de la respuesta.
+                res.write(data.toString());       
+                // Envia la respuesta
+                return res.end();
+        });
+    } 
 
     if(req.method === 'POST' && pathname == '/cv'){
         //Peticion del formulario a traves del metodo POST
